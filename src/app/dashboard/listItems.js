@@ -9,63 +9,62 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { Grid } from '@mui/material';
 
-export const mainListItems = (
-  <Grid container >
-    <ListItemButton>
+export const mainListItems = (handleListItemClick) => (
+  <React.Fragment>
+    <ListItemButton onClick={() => handleListItemClick('/')}>
       <ListItemIcon>
-        <DashboardIcon sx={{ color: '#fff'}} />
+        <DashboardIcon sx={{ color: '#fff' }} />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton onClick={() => handleListItemClick('/inventario')}>
       <ListItemIcon>
-        <ShoppingCartIcon sx={{ color: '#fff'}} />
+        <ShoppingCartIcon sx={{ color: '#fff' }} />
       </ListItemIcon>
-      <ListItemText primary="Orders" />
+      <ListItemText primary="Inventario" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton onClick={() => handleListItemClick('/agregar-producto')}>
       <ListItemIcon>
-        <PeopleIcon sx={{ color: '#fff'}}/>
+        <PeopleIcon sx={{ color: '#fff' }} />
       </ListItemIcon>
-      <ListItemText primary="Customers" />
+      <ListItemText primary="Agregar Producto" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton onClick={() => handleListItemClick('/pedidos')}>
       <ListItemIcon>
-        <BarChartIcon sx={{ color: '#fff'}} />
+        <BarChartIcon sx={{ color: '#fff' }} />
       </ListItemIcon>
-      <ListItemText primary="Reports" />
+      <ListItemText primary="Pedidos" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton onClick={() => handleListItemClick('/reportes')}>
       <ListItemIcon>
-        <LayersIcon sx={{ color: '#fff'}} />
+        <LayersIcon sx={{ color: '#fff' }} />
       </ListItemIcon>
-      <ListItemText primary="Integrations" />
+      <ListItemText primary="Reportes" />
     </ListItemButton>
-  </Grid>
+  </React.Fragment>
 );
 
 export const secondaryListItems = (
   <React.Fragment>
-    <ListSubheader component="div" inset sx={{background: '#101010', color: 'white'}}>
+    <ListSubheader component="div" inset sx={{ color: '#fff', background: '#000' }}>
       Saved reports
     </ListSubheader>
     <ListItemButton>
       <ListItemIcon>
-        <AssignmentIcon sx={{ color: '#fff'}} />
+        <AssignmentIcon sx={{ color: '#fff' }} />
       </ListItemIcon>
       <ListItemText primary="Current month" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <AssignmentIcon sx={{ color: '#fff'}} />
+        <AssignmentIcon sx={{ color: '#fff' }} />
       </ListItemIcon>
       <ListItemText primary="Last quarter" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <AssignmentIcon  sx={{ color: '#fff'}}/>
+        <AssignmentIcon sx={{ color: '#fff' }} />
       </ListItemIcon>
       <ListItemText primary="Year-end sale" />
     </ListItemButton>

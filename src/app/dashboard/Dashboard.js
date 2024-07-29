@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -20,9 +19,15 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
-import Chart from './Chart';
+import Chart from './Graficas/Chart';
 import Deposits from './Deposits';
-import Orders from './Orders';
+import Orders from './Items/Orders';
+import { useState } from 'react';
+import { FormProduct } from './Items/FormProduct';
+import { InventaryTable } from './Items/InventaryTable';
+import { ContentCopyOutlined } from '@mui/icons-material';
+import { ProductDetails } from '../components/ProductDetails';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -87,21 +92,23 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
+  const navigate = useNavigate();
+
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+
+  const handleListItemClick = (route) => {
+    navigate(route);
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open} sx={{background: '#010101'}}>
-          <Toolbar
-            sx={{
-              pr: '24px', // keep right padding when drawer closed
-            }}
-          >
+        <AppBar position="absolute" open={open} sx={{ background: '#010101' }}>
+          <Toolbar sx={{ pr: '24px' }}>
             <IconButton
               edge="start"
               color="inherit"
@@ -131,27 +138,25 @@ export default function Dashboard() {
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open} sx={{
-        '& .MuiDrawer-paper': {
-          backgroundColor: '#101010',
-          color: '#ffffff', // Cambia el color del texto si es necesario
-        },
-      }} >
-          <Toolbar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-              
-            }}
-          >
+          '& .MuiDrawer-paper': {
+            height: '100vh',
+            backgroundColor: '#101010',
+            color: '#ffffff',
+            overflowY: 'auto',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+              display: 'none',
+            },
+          },
+        }}>
+          <Toolbar sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', px: [1], overflowY: 'auto' }}>
             <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon sx={{ color: '#fff'}} />
+              <ChevronLeftIcon sx={{ color: '#fff' }} />
             </IconButton>
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
+            {mainListItems(handleListItemClick)}
             <Divider sx={{ my: 1 }} />
             {secondaryListItems}
           </List>
@@ -166,46 +171,19 @@ export default function Dashboard() {
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
-            
           }}
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                    
-                  }}
-                >
-                  <Chart />
-                </Paper>
-              </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Orders />
-                </Paper>
-              </Grid>
-            </Grid>
+            <Routes>
+              <Route path="/" element={<DashboardHome />} />
+              <Route path="/inventario" element={<InventaryTable />} />
+              <Route path="/agregar-producto" element={<FormProduct />} />
+              <Route path="/detalles-producto" element={<ProductDetails />} />
+              <Route path="/pedidos" element={<Orders />} />
+              <Route path="/reportes" element={<Chart />} />
+              {/* Add other routes here */}
+            </Routes>
             <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
@@ -213,3 +191,23 @@ export default function Dashboard() {
     </ThemeProvider>
   );
 }
+
+const DashboardHome = () => (
+  <Grid container spacing={3}>
+    <Grid item xs={12} md={8} lg={9}>
+      <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 240 }}>
+        <Chart />
+      </Paper>
+    </Grid>
+    <Grid item xs={12} md={4} lg={3}>
+      <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 240 }}>
+        <Deposits />
+      </Paper>
+    </Grid>
+    <Grid item xs={12}>
+      <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+        <Orders />
+      </Paper>
+    </Grid>
+  </Grid>
+);
